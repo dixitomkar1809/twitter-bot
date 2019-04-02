@@ -17,7 +17,7 @@ Feel free to ask me questions about the code.
 Thanks :D
 
 ## Socket Programming
-*Source: https://www.geeksforgeeks.org/socket-programming-python/*
+*Reference: https://www.geeksforgeeks.org/socket-programming-python/*
 
 Socket is an endpoint used to send or receive data, socket programming is connecting two nodes on a networks to start a communication between them.
 
@@ -36,3 +36,7 @@ bind() method that binds the server to spefic ip and port to listen to incoming 
 listen() method puts the server to listening mode.
 
 Similarly accept() and close() initiate and close the connection with the client.
+
+_To check if the serverSocket.py is running well or not, so just run the serverSocket.py and open another terminal and run the command **telnet localhost 999**_
+
+If not then run and check the clientSocket.py

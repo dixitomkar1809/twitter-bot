@@ -1,5 +1,5 @@
 # Author: Omkar Dixit
-# Source: http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html
+# Reference: http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html
 
 import tweepy
 import json

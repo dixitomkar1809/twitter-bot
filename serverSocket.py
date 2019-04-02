@@ -1,5 +1,5 @@
 # Author : Omkar Dixit
-# Source: https://www.geeksforgeeks.org/socket-programming-python/
+# Reference: https://www.geeksforgeeks.org/socket-programming-python/
 
 import socket
 
@@ -12,10 +12,12 @@ port = 999
 
 # as we know bind() will bind the server to a specific ip and port
 # leaving it blank will make it listen to requets coming from other computers of that network
-s.bind(('', port))
+# if we pass 127.0.0.1 then it will listen to the calls made in the local computer
+s.bind(('127.0.0.1', port))
 print("Socket Binded to", port)
 
 # as we know listen() will put the server to listening mode
+# here 5 means that 5 connections are kept waiting if the server is busy and any more connect they are refused
 s.listen(5)
 print("Socket Listening!")
 
@@ -26,6 +28,13 @@ while True:
     print("Got Connection from ", addr)
 
     # Send a reply message
-    c.send("Thanks for connecting!")
+    c.send(b"Thanks for connecting!")
 
     c.close()
+
+# To just check the server Socket
+# run the server socket
+# open another terminal
+# use the follwing command
+# telnet localhost 999 
+# here 999 because 999 is the one where server is running
