@@ -40,3 +40,7 @@ Similarly accept() and close() initiate and close the connection with the client
 _To check if the serverSocket.py is running well or not, so just run the serverSocket.py and open another terminal and run the command **telnet localhost 999**_
 
 If not then run and check the clientSocket.py
+
+## Lets go back to scraper.py
+
+Now in scraper we are taking the tweets with the address then using the Google Geocoding Api we get the lat lnt, after that we get the sentiment of the tweet using TextBlob library.

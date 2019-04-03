@@ -5,6 +5,8 @@ import tweepy
 import json
 import requests
 import re
+import socket
+from textblob import TextBlob
 from creds import *
 
 class MyStreamListener(tweepy.StreamListener):
@@ -13,6 +15,7 @@ class MyStreamListener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.location is not None:
             cleanTweet = self.clean_tweet(status.text)
+            print(cleanTweet)
             googleMapsURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+status.user.location+"&key="+googleMapsApi
             results = requests.get(url=googleMapsURL)
             data = results.json()
@@ -22,10 +25,11 @@ class MyStreamListener(tweepy.StreamListener):
                 for i in data['results'][0]['address_components']:
                     lat = data['results'][0]['geometry']['location']['lat']
                     lng = data['results'][0]['geometry']['location']['lng']
-                    dictItem = {'text': cleanTweet, 'location': status.user.location, 'coordinates': [lat, lng]}
+                    dictItem = {'text': cleanTweet, 'location': status.user.location, 'coordinates': [lat, lng], 'sentiment':self.get_sentiment(cleanTweet)}
                     output = json.dumps(dictItem)
                     print(output)
                     output+="\n"
+                    # conn.send(output.encode('utf-8'))
     
     def on_error(self, status_code):
         if status_code==420:
@@ -37,13 +41,28 @@ class MyStreamListener(tweepy.StreamListener):
     def clean_tweet(self, tweet):
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
+    def get_sentiment(self, tweet):
+        analysis = TextBlob(tweet)
+        if analysis.sentiment.polarity > 0:
+            return 'Positive'
+        elif analysis.sentiment.polarity==0:
+            return 'Neutral'
+        else:
+            return 'Negative'
+
 if __name__=="__main__":
     # Authorization
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
     api = tweepy.API(auth)
     
+    # Creating Sockets
+    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # s.bind(('localhost', 9001))
+    # s.listen(1)
+    # conn, addr = s.accept()
+
     # Creating Listener
     myStreamListener = MyStreamListener()
     myStream = tweepy.Stream(auth = api.auth, listener = myStreamListener)
-    myStream.filter(track=['#TuesdayThoughts'])
+    myStream.filter(track=['#Trump'])
